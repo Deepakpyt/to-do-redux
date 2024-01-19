@@ -1,14 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import { ThemeContext } from "../App";
 import { useDrag } from "react-dnd";
-import { deleteToDo, modifyToDo } from "../app/actions";
+import { deleteToDo } from "../app/actions";
 import { useDispatch } from "react-redux";
+import { ModifyModal } from "./ModifyModal";
 
 export const Task = ({ task }) => {
   const { theme } = useContext(ThemeContext);
 
   const dispatch = useDispatch();
+
+  const [modal, setModal] = useState(false);
 
   let bgColor = theme ? "bg-red-300" : "";
   let textColor = theme ? "text-amber-50" : "";
@@ -21,6 +24,7 @@ export const Task = ({ task }) => {
     }),
   }));
 
+  const activeModal = () => setModal(!modal);
 
   return (
     <div
@@ -32,7 +36,8 @@ export const Task = ({ task }) => {
       <p>{task.name}</p>
       <button
         className={`absolute bottom-1 right-8 text-blue-700`}
-        onClick={() => dispatch(modifyToDo(task.id))}
+        onClick={activeModal}
+        disabled={true && task.status !== "todo"} //cannot modify in "in progress" and "closed" status
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -49,6 +54,7 @@ export const Task = ({ task }) => {
           />
         </svg>
       </button>
+      {modal && <ModifyModal activeModal={activeModal} taskid={task.id} />}
       <button
         className={`absolute bottom-1 right-1 text-red-400`}
         onClick={() => dispatch(deleteToDo(task.id))}

@@ -45,10 +45,9 @@ const todoReducers = (state = initialData, action) => {
 
     case "MODIFY":
       const tasksAfterModification = state.tasks.map((task) => {
-        if (task.id === action.id) {
-          let name = prompt("Enter Modification Here:");
+        if (task.id === action.payload.id) {
           if (name !== "" && name !== null) {
-            task.name = name;
+            task.name = action.payload.name;
             toast("Task is Modified.", { icon: "📝" });
           }
           return task;

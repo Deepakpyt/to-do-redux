@@ -28,9 +28,12 @@ export const deleteToDo = (id) => {
   };
 };
 
-export const modifyToDo = (id) => {
+export const modifyToDo = (id, name) => {
   return {
     type: "MODIFY",
-    id: id,
+    payload: {
+      id: id,
+      name: name
+    }
   };
 };
